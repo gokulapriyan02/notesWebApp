@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NoteItems from "./NoteItems";
 function Note(){
 
@@ -20,6 +20,16 @@ function addNote(){
     setNoteItems((prev) => ([...prev, note]));
     setNote({title:"", content:""});
 }
+
+ useEffect(  () =>{ 
+    const fetchNote = async() => {
+            const response = await fetch("http://localhost:3000");
+            const data = await response.json();
+            setNoteItems(data);
+    }   
+    
+    fetchNote();
+}, []);
 
 
     return(
