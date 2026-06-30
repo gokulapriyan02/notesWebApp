@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import NoteItems from "./NoteItems";
+import "./styles.css"
 function Note(){
 
 const [note, setNote] = useState({
@@ -55,15 +56,15 @@ async function handleDelete(key){
 
     return(
         <div>
-            <h1>Handy Notes</h1>
-            <p>Write, Edit, Access at Anytime, Anywhere..!</p>
-            <div>
+            <h1 id="title">Handy Notes</h1>
+            <p id="title-para">Write, Edit, Access at Anytime, Anywhere..!</p>
+            <div id="input-container">
                 <h2>Write what's on your Mind!</h2>
-                <input type="text" name="title" onChange={storeNote} value={note.title}/>
-                <input type="text"  name="content" onChange={storeNote} value={note.content}/>
+                <input type="text" name="title" onChange={storeNote} value={note.title} placeholder="Note Title"/>
+                <input type="text"  name="content" onChange={storeNote} value={note.content} placeholder="Note Content"/>
                 <button onClick={addNote}>Add</button>
             </div>
-            <div>
+            <div id="note-container">
                 {noteItems.map((item, index) =>{
                      return  <NoteItems title={item.title} content={item.content} key={item.id} onDelete={() => handleDelete(item.id)}/>
                 })}
