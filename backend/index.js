@@ -31,10 +31,20 @@ app.post("/", async (req, res) => {
     try{
     const title = req.body.title;
     const content = req.body.content; 
+    const NoteId = req.body.id;
 
-    let result = await db.query("INSERT INTO notes (title, content) VALUES ($1, $2) RETURNING *", [title, content]);
-    let data = result.rows;
-    res.json(data);
+    if (NoteId === undefined){
+
+            let result = await db.query("INSERT INTO notes (title, content) VALUES ($1, $2) RETURNING *", [title, content]);
+            let data = result.rows;
+            res.json(data);
+    }
+
+    else{
+        let result = await db.query("UPDATE notes SET title = $1, content= $2 WHERE id = $3 RETURNING *", [title, content, NoteId]);
+        let data = result.rows;
+        res.json(data[0]);
+    }
     }
     catch(err){
         console.error(err);
@@ -55,4 +65,11 @@ app.post("/delete", async (req, res) =>{
     }
 })
 
+
+app.post("/edit", async (req, res) =>{
+
+    let id = req.body.id;
+    let oldNote = await db.query("SELECT title, content, id FROM notes WHERE id = $1", [id]);
+    res.json(oldNote.rows)
+})
 app.listen(port, ()=> (console.log("server activated")));
