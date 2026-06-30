@@ -27,4 +27,17 @@ app.get("/", async(req, res) =>{
     }
 })
 
+
+app.post("/delete", async (req, res) =>{
+    try{
+    const key = req.body.id;
+    const result = await db.query("DELETE FROM notes WHERE id = $1 RETURNING * ", [key] )
+      res.json(result.rows[0]);
+
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).send("database error");
+    }
+})
 app.listen(port, ()=> (console.log("server activated")));

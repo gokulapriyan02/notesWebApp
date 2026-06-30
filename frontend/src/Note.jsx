@@ -21,6 +21,21 @@ function addNote(){
     setNote({title:"", content:""});
 }
 
+async function handleDelete(key){
+        const result = await fetch("http://localhost:3000/delete", {
+            method: "POST",
+            headers: {"Content-Type" : "application/json"},
+            body: JSON.stringify({id : key})
+        })
+        const dataToDelete =  await result.json();
+
+        setNoteItems((prev) => {
+           return  prev.filter((items) =>{
+                  return  items.id !== dataToDelete.id;
+           })
+        });
+}
+
  useEffect(  () =>{ 
     const fetchNote = async() => {
             const response = await fetch("http://localhost:3000");
@@ -44,7 +59,7 @@ function addNote(){
             </div>
             <div>
                 {noteItems.map((item, index) =>{
-                     return  <NoteItems title={item.title} content={item.content} key={index}/>
+                     return  <NoteItems title={item.title} content={item.content} key={item.id} onDelete={() => handleDelete(item.id)}/>
                 })}
                
             </div>
