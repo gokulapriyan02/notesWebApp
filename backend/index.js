@@ -35,6 +35,18 @@ app.post("/", async (req, res) => {
     let result = await db.query("INSERT INTO notes (title, content) VALUES ($1, $2) RETURNING *", [title, content]);
     let data = result.rows;
     res.json(data);
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).send("database error");
+    }
+});
+
+app.post("/delete", async (req, res) =>{
+    try{
+    const key = req.body.id;
+    const result = await db.query("DELETE FROM notes WHERE id = $1 RETURNING * ", [key] )
+      res.json(result.rows[0]);
 
     }
     catch(err){
