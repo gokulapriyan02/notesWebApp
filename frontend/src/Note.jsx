@@ -16,8 +16,14 @@ function storeNote(event){
 
 }
 
-function addNote(){
-    setNoteItems((prev) => ([...prev, note]));
+async function addNote(){
+    const result = await fetch("http://localhost:3000", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(note)
+    });
+    const data = await  result.json();
+    setNoteItems((prev) => ([...prev, data]));
     setNote({title:"", content:""});
 }
 
@@ -29,7 +35,7 @@ function addNote(){
     }   
     
     fetchNote();
-}, []);
+}, [noteItems]);
 
 
     return(

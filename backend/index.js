@@ -27,4 +27,20 @@ app.get("/", async(req, res) =>{
     }
 })
 
+app.post("/", async (req, res) => {
+    try{
+    const title = req.body.title;
+    const content = req.body.content; 
+
+    let result = await db.query("INSERT INTO notes (title, content) VALUES ($1, $2) RETURNING *", [title, content]);
+    let data = result.rows;
+    res.json(data);
+
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).send("database error");
+    }
+})
+
 app.listen(port, ()=> (console.log("server activated")));
